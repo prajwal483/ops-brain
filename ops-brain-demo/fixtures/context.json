@@ -1,0 +1,17 @@
+{
+  "meetingDate": "2026-11-17",
+  "meetingTitle": "Launch sync",
+  "team": [
+    { "id": "riya", "name": "Riya Shah", "aliases": ["Riya", "RS"] },
+    { "id": "karan", "name": "Karan Mehta", "aliases": ["Karan", "KM"] },
+    { "id": "meera", "name": "Meera Iyer", "aliases": ["Meera"] },
+    { "id": "aditya", "name": "Aditya Rao", "aliases": ["Aditya", "Adi"] }
+  ],
+  "goals": [
+    { "id": "G1", "title": "Launch the D2C website by 15 Jan 2027" },
+    { "id": "G2", "title": "First 500 orders by 31 Mar 2027" }
+  ],
+  "existingTasks": [
+    { "id": "TASK-101", "title": "Finalise packaging vendor", "ownerId": "karan", "due": "2026-11-28" }
+  ]
+}

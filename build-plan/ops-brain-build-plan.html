@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ops Brain — Build Plan (PRD 1)</title>
+<style>
+  @page { size: A4; margin: 10mm 11mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Arial, sans-serif; font-size: 8.6pt; line-height: 1.32; color: #1c1c1c; margin: 0; }
+  h1 { font-size: 14pt; margin: 0 0 1mm; }
+  .lede { margin: 0 0 2mm; color: #333; }
+  h2 { font-size: 9.6pt; margin: 2.2mm 0 0.8mm; padding-bottom: 0.4mm; border-bottom: 1px solid #c9c9c9; color: #0b3d62; }
+  ol, ul { margin: 0; padding-left: 4.2mm; }
+  li { margin: 0 0 0.6mm; }
+  p { margin: 0 0 1mm; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 5mm; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { border: 1px solid #d4d4d4; padding: 0.6mm 1.4mm; vertical-align: top; text-align: left; }
+  th { background: #eef3f7; }
+  td.num { text-align: right; white-space: nowrap; }
+  tr.total td { font-weight: 600; background: #f6f6f6; }
+  code { font-family: Consolas, monospace; font-size: 8pt; background: #f1f1f1; padding: 0 0.6mm; border-radius: 1px; }
+  .muted { color: #555; }
+  svg { display: block; width: 100%; height: auto; }
+</style>
+</head>
+<body>
+
+<h1>Ops Brain — Build Plan (PRD 1)</h1>
+<p class="lede">Meetings become <em>proposed</em> tasks with owner, date, goal and dependencies. A person approves them. The system then forecasts each chain, checks in before work is late, and warns everyone downstream at least 3 days before a slip reaches them.</p>
+
+<h2>v1 (weeks 1–3) and why</h2>
+<ol>
+  <li><b>Meeting → Proposed tasks.</b> A Notion button creates tasks with <code>Status = Proposed</code>, owner, goal, <code>Blocked by</code>, a source quote and review flags. <em>(This is the demo.)</em></li>
+  <li><b>Approval.</b> Slack DM with <em>Approve all · Review in Notion</em>. Nobody is assigned work until a person approves.</li>
+  <li><b>Slip forecasting.</b> Latest finish = min(own due, dependents' latest start); latest start = latest finish − Estimate. A task is at risk if it hasn't started by its latest start, its owner says "need more days", or its date moves. Every owner up the chain to the goal gets a DM, with new dates <em>proposed</em> (Accept / Keep), never applied.</li>
+  <li><b>Check-ins.</b> Slack, 2 working days before each latest start: <em>On track? · Need N days · Blocked by…</em> No reply gets a nudge, then the lead is told. This catches silent slips.</li>
+  <li><b>Priorities.</b> Goal Weight (1–5) × urgency bucket (late 4 · 1–3 days 3 · 4–7 days 2 · later 1) × (1 + tasks unblocked, max 3). Buckets plus "ties keep yesterday's order" keep ranks stable. Each task gets a why line, e.g. <em>Launch (5) · starts in 2 days · unblocks 3</em>. It is a founder-approved formula in config, not AI.</li>
+  <li><b>Goal health.</b> On track / At risk / Off track, with the reason, in Notion.</li>
+</ol>
+<p><b>Why this order:</b> everything depends on linked tasks, and extraction is the riskiest part. The demo proves it: free models got 32/33 fields right on 2 held-out notes. Forecasting and check-ins are the PRD's core promise, so they ship in v1. <b>Later:</b> founder digest (v2), AI agents for recurring tasks and prompt tuning from run history (v3).</p>
+
+<h2>Architecture</h2>
+<svg viewBox="0 0 760 132" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif" font-size="11">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0b3d62"/>
+    </marker>
+  </defs>
+  <!-- Notion -->
+  <rect x="4" y="6" width="232" height="120" rx="7" fill="#f4f7fa" stroke="#0b3d62"/>
+  <text x="120" y="24" text-anchor="middle" font-weight="700" fill="#0b3d62">Notion (source of truth)</text>
+  <text x="18" y="44">• Meetings + "Extract tasks" button</text>
+  <text x="18" y="60">• Tasks (Proposed → Active)</text>
+  <text x="18" y="76">• Goals (weight, target, health)</text>
+  <text x="18" y="92">• Config (prompts, routes, rules)</text>
+  <text x="18" y="108">• AI Runs (logs, review outcome)</text>
+  <!-- Worker -->
+  <rect x="300" y="34" width="170" height="64" rx="7" fill="#fff8ec" stroke="#b36b00"/>
+  <text x="385" y="58" text-anchor="middle" font-weight="700">Ops Brain worker</text>
+  <text x="385" y="74" text-anchor="middle">Cloudflare Workers</text>
+  <text x="385" y="89" text-anchor="middle" fill="#555">queue + hourly cron</text>
+  <!-- OpenRouter -->
+  <rect x="560" y="6" width="190" height="44" rx="7" fill="#f2f8f2" stroke="#2e7d32"/>
+  <text x="655" y="25" text-anchor="middle" font-weight="700">OpenRouter</text>
+  <text x="655" y="41" text-anchor="middle" fill="#555">any model, one API</text>
+  <!-- Slack -->
+  <rect x="560" y="70" width="190" height="56" rx="7" fill="#f7f2fa" stroke="#6a1b9a"/>
+  <text x="655" y="89" text-anchor="middle" font-weight="700">Slack</text>
+  <text x="655" y="104" text-anchor="middle">approvals · check-ins · slip DMs</text>
+  <text x="655" y="118" text-anchor="middle" fill="#555">#ops-brain-alerts</text>
+  <!-- arrows -->
+  <line x1="236" y1="52" x2="298" y2="52" stroke="#0b3d62" marker-end="url(#a)"/>
+  <text x="267" y="46" text-anchor="middle" font-size="9.5" fill="#333">webhooks</text>
+  <line x1="300" y1="82" x2="238" y2="82" stroke="#0b3d62" marker-end="url(#a)"/>
+  <text x="268" y="96" text-anchor="middle" font-size="9.5" fill="#333">tasks, logs</text>
+  <line x1="470" y1="50" x2="558" y2="30" stroke="#0b3d62" marker-end="url(#a)"/>
+  <text x="512" y="32" text-anchor="middle" font-size="9.5" fill="#333">extract</text>
+  <line x1="470" y1="82" x2="558" y2="97" stroke="#0b3d62" marker-start="url(#a)" marker-end="url(#a)"/>
+  <text x="512" y="104" text-anchor="middle" font-size="9.5" fill="#333">DMs / buttons</text>
+</svg>
+
+<div class="grid">
+  <div>
+    <h2>Data model (added to existing Tasks / Projects / Meetings)</h2>
+    <ul>
+      <li><b>Goals:</b> Weight, Target, Health + reason.</li>
+      <li><b>Tasks:</b> Goal · Blocked by ↔ Blocking · Estimate · Latest start · Risk · Score · Why · Last check-in · Quote · Run ID · status <code>Proposed</code>.</li>
+      <li><b>Team:</b> Slack ID, aliases, hours.</li>
+      <li><b>Config:</b> versioned prompts, model routes and rules, each Draft or Live.</li>
+      <li><b>AI Runs:</b> input hash, raw output, prompt version, model, tokens, cost, and approved / edited / rejected for each task.</li>
+    </ul>
+
+    <h2>Buy vs build</h2>
+    <ul>
+      <li><b>Buy:</b> Notion (buttons, webhooks; AI Meeting Notes for Hindi/Gujarati/English), a Slack app, OpenRouter (any model, one API), Cloudflare Workers.</li>
+      <li><b>Build:</b> extraction with checks (nothing off the shelf links to <em>your</em> goals and tasks); chain forecasting (Notion's timeline warns no one); the priority formula.</li>
+      <li><b>Rejected:</b> Motion/Reclaim (would replace Notion); Zapier/Make (weak for graph walks, priced per task).</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Failures</h2>
+    <ul>
+      <li><b>Bad AI output:</b> schema check, then one retry that shows the model its error. Anything doubtful becomes a review flag, not a guess: unknown or ambiguous owner, impossible date, quote not in the note, a cycle, a dependency due later.</li>
+      <li><b>Provider errors:</b> backoff, then a fallback model. <b>Notion writes:</b> queued (~3 requests/s).</li>
+      <li><b>Reruns:</b> keyed on meeting + content hash; a "delete this run's proposals" button undoes a bad run.</li>
+      <li><b>Alerts:</b> plain-language messages in <b>#ops-brain-alerts</b>, each naming a runbook entry. Held outside working hours unless a slip is under 3 days away.</li>
+    </ul>
+
+    <h2>Monthly cost</h2>
+    <table>
+      <tr><th>Item</th><th>₹/month</th></tr>
+      <tr><td>LLM: 40 meetings × 8k/2k tokens on Haiku 5.5 ($0.10/$0.50 per M), plus slip messages. ₹0 on a free model</td><td class="num">~20</td></tr>
+      <tr><td>Cloudflare Workers Paid ($5 minimum; includes 1M queue ops)</td><td class="num">~430</td></tr>
+      <tr><td>Notion Plus or above (needed for webhooks), Slack</td><td class="num">existing</td></tr>
+      <tr class="total"><td>Total (each run's cost logged in AI Runs)</td><td class="num">≈ ₹450</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="grid">
+  <div>
+    <h2>Measuring the success metrics</h2>
+    <ul>
+      <li>Fully linked %: a Notion formula.</li>
+      <li>Slip lead time: alert time vs. downstream due date.</li>
+      <li>Approved without edits: AI Runs review outcomes.</li>
+      <li>Priority fit: a founder's Friday Agree/Disagree.</li>
+      <li>Admin time: lead edits per week.</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Assumptions</h2>
+    <ul>
+      <li>Goal weights: founders set 1–5, reviewed monthly.</li>
+      <li>Alerts: Mon–Sat, 10:00–19:00 IST.</li>
+      <li>Tasks are written in English.</li>
+      <li>Meeting Notes are read via the Notion API's <code>meeting_notes</code> block (API 2026-03-11). Webhooks carry properties only, so the content is fetched.</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

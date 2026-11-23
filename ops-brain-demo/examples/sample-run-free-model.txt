@@ -1,0 +1,112 @@
+# (Flag wording has since changed: "No due date was mentioned" is now "AI found no due date. Check the note", and "No owner was named in the meeting" is now "AI found no owner. Check the note".)
+# (The eval's later Nemotron run on the same note gave a different goal answer (null), so outputs vary between runs even at temperature 0.)
+# Real run — free model (nvidia/nemotron-3.5-super-vl:free), prompt v2, 2026-11-19
+# Command: npm run extract -- --note fixtures/meeting-2026-11-17-launch-sync.md --context fixtures/context.json
+#
+# Below is the unedited output. Known model misses in this run:
+# - T3 "Book product photographer": the note says "shoot by 12 Dec", but the model returned no due date.
+#   The system didn't guess; it flagged the task for review ("No due date was mentioned"), so a
+#   person fills it in at approval.
+# - T3 should depend on T1 (photos need the final boxes). The model didn't link them, and nothing
+#   flags a missing dependency. This is why every task stays Proposed until a person approves it.
+
+Proposed tasks from "Launch sync" (2026-11-17): 5 tasks, 2 need a look
+
+✓ T1  Finalise box design
+    owner: Meera Iyer | due: 2026-12-05 | goal: Launch the D2C website by 15 Jan 2027 | after: TASK-101, T2
+⚠ T2  Check FSSAI labelling rules for box print
+    owner: — | due: — | goal: Launch the D2C website by 15 Jan 2027 | after: —
+    ⚠ No owner was named in the meeting
+    ⚠ No due date was mentioned
+⚠ T3  Book product photographer
+    owner: Aditya Rao | due: — | goal: Launch the D2C website by 15 Jan 2027 | after: —
+    ⚠ No due date was mentioned
+✓ T4  Coordinate with Shopify freelancer for product pages
+    owner: Karan Mehta | due: 2026-12-20 | goal: Launch the D2C website by 15 Jan 2027 | after: T3
+✓ T5  Draft Instagram teaser content calendar
+    owner: Aditya Rao | due: 2026-11-20 | goal: Launch the D2C website by 15 Jan 2027 | after: —
+
+Run log line (runs/runs.jsonl):
+{
+  "runId": "run_20261119T174108_462b",
+  "job": "extract_tasks",
+  "startedAt": "2026-11-19T17:41:08.487Z",
+  "promptId": "extract-tasks",
+  "promptVersion": "2",
+  "inputSha256": "234ae84e541774c16228c6ecce2d495bfb245c9e16858f53f23c9eba3d4e4e90",
+  "inputPreview": "# Launch sync (Tue 17 Nov 2026)\r\n\r\nAttendees: Riya, Karan, Meera, Aditya\r\n\r\n## Notes\r\n\r\n- Packaging: Karan said vendor finalise ho jayega by 28th, already tracked. Once vendor is final, Meera ko box d",
+  "reviewStatus": "pending",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "attempts": 1,
+  "inputTokens": 750,
+  "outputTokens": 5501,
+  "costUsd": 0,
+  "output": [
+    {
+      "ref": "T1",
+      "title": "Finalise box design",
+      "ownerId": "meera",
+      "due": "2026-12-05",
+      "goalId": "G1",
+      "dependsOn": [
+        "TASK-101",
+        "T2"
+      ],
+      "sourceQuote": "Once vendor is final, Meera ko box design final karna hai, target 5 Dec.",
+      "confidence": 0.95,
+      "reviewReasons": []
+    },
+    {
+      "ref": "T2",
+      "title": "Check FSSAI labelling rules for box print",
+      "ownerId": null,
+      "due": null,
+      "goalId": "G1",
+      "dependsOn": [],
+      "sourceQuote": "Somebody has to check FSSAI labelling rules for the box print.",
+      "confidence": 0.9,
+      "reviewReasons": [
+        "No owner was named in the meeting",
+        "No due date was mentioned"
+      ]
+    },
+    {
+      "ref": "T3",
+      "title": "Book product photographer",
+      "ownerId": "aditya",
+      "due": null,
+      "goalId": "G1",
+      "dependsOn": [],
+      "sourceQuote": "Aditya will book the photographer; shoot by 12 Dec.",
+      "confidence": 0.85,
+      "reviewReasons": [
+        "No due date was mentioned"
+      ]
+    },
+    {
+      "ref": "T4",
+      "title": "Coordinate with Shopify freelancer for product pages",
+      "ownerId": "karan",
+      "due": "2026-12-20",
+      "goalId": "G1",
+      "dependsOn": [
+        "T3"
+      ],
+      "sourceQuote": "Karan to coordinate with the Shopify freelancer.",
+      "confidence": 0.9,
+      "reviewReasons": []
+    },
+    {
+      "ref": "T5",
+      "title": "Draft Instagram teaser content calendar",
+      "ownerId": "aditya",
+      "due": "2026-11-20",
+      "goalId": "G1",
+      "dependsOn": [],
+      "sourceQuote": "Adi, teaser content calendar draft Friday tak.",
+      "confidence": 0.9,
+      "reviewReasons": []
+    }
+  ],
+  "error": null
+}

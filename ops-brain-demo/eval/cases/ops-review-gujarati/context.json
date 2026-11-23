@@ -1,0 +1,17 @@
+{
+  "meetingDate": "2026-11-25",
+  "meetingTitle": "Ops review",
+  "team": [
+    { "id": "ravi", "name": "Ravi Patel", "aliases": ["Ravi", "રવિ"] },
+    { "id": "neha", "name": "Neha Joshi", "aliases": ["Neha", "નેહા"] },
+    { "id": "dhruv", "name": "Dhruv Shah", "aliases": ["Dhruv"] },
+    { "id": "kavya", "name": "Kavya Menon", "aliases": ["Kavya"] }
+  ],
+  "goals": [
+    { "id": "G1", "title": "Deliver within 3 days in Ahmedabad by 31 Jan 2027" },
+    { "id": "G2", "title": "Cut return rate below 5% by 31 Mar 2027" }
+  ],
+  "existingTasks": [
+    { "id": "TASK-210", "title": "Sign warehouse lease addendum", "ownerId": "neha", "due": "2026-11-27" }
+  ]
+}

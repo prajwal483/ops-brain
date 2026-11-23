@@ -1,0 +1,15 @@
+{
+  "meetingDate": "2026-11-23",
+  "meetingTitle": "Vendor call",
+  "team": [
+    { "id": "priya-nair", "name": "Priya Nair", "aliases": [] },
+    { "id": "priya-desai", "name": "Priya Desai", "aliases": [] },
+    { "id": "sanjay", "name": "Sanjay Kulkarni", "aliases": ["Sanjay"] },
+    { "id": "tara", "name": "Tara Bose", "aliases": ["Tara"] }
+  ],
+  "goals": [
+    { "id": "G1", "title": "Open the second packing line by 28 Feb 2027" },
+    { "id": "G2", "title": "Cut packaging cost per order by 10% by 31 Mar 2027" }
+  ],
+  "existingTasks": []
+}

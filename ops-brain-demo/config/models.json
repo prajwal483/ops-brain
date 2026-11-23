@@ -1,0 +1,15 @@
+{
+  "rules": { "lowConfidence": 0.7 },
+  "jobs": {
+    "extract_tasks": {
+      "model": "nvidia/nemotron-3.5-super-vl:free",
+      "inputUsdPerMTok": 0,
+      "outputUsdPerMTok": 0
+    },
+    "extract_tasks_paid": {
+      "model": "anthropic/claude-haiku-5.5",
+      "inputUsdPerMTok": 0.1,
+      "outputUsdPerMTok": 0.5
+    }
+  }
+}

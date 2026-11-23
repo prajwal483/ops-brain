@@ -1,0 +1,9 @@
+{
+  "tasks": [
+    { "id": "quote", "match": ["quote"], "owner": null, "due": "2026-11-27", "goal": "G2", "dependsOn": [], "expectFlag": "matches more than one" },
+    { "id": "tape", "match": ["tape"], "owner": "priya-desai", "due": "2026-12-04", "goal": "G2", "dependsOn": [] },
+    { "id": "audit", "match": ["audit"], "owner": "sanjay", "due": null, "goal": "G1", "dependsOn": [] },
+    { "id": "visit", "match": ["visit"], "owner": "tara", "due": null, "goal": "G1", "dependsOn": [] }
+  ],
+  "mustNotInclude": [["pune"]]
+}

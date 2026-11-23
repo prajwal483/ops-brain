@@ -1,0 +1,11 @@
+{
+  "dev": true,
+  "tasks": [
+    { "id": "fssai", "match": ["fssai"], "owner": null, "due": null, "goal": ["G1", "G2", null], "dependsOn": [] },
+    { "id": "box", "match": ["box", "design"], "not": ["fssai"], "owner": "meera", "due": "2026-12-05", "goal": ["G1", "G2", null], "dependsOn": ["TASK-101", "fssai"] },
+    { "id": "photo", "match": ["photograph"], "owner": "aditya", "due": "2026-12-12", "goal": ["G1", "G2", null], "dependsOn": [["box"], [], ["TASK-101"]] },
+    { "id": "pages", "match": ["product", "page"], "owner": ["karan", "riya", null], "due": "2026-12-20", "goal": "G1", "dependsOn": ["photo"] },
+    { "id": "teaser", "match": ["teaser"], "owner": "aditya", "due": "2026-11-20", "goal": "any", "dependsOn": [] }
+  ],
+  "mustNotInclude": [["gujarati", "landing"]]
+}
