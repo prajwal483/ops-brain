@@ -2,13 +2,16 @@
   "name": "ops-brain-demo",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=20.12" },
+  "engines": {
+    "node": ">=20.12"
+  },
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "extract": "tsx src/cli.ts",
     "eval": "tsx src/eval-cli.ts",
-    "review": "tsx src/review-cli.ts"
+    "review": "tsx src/review-cli.ts",
+    "demo": "tsx src/demo-cli.ts"
   },
   "dependencies": {
     "@notionhq/client": "^2.3.0",

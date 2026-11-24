@@ -12,6 +12,8 @@ npm run extract -- --note fixtures/meeting-2026-11-17-launch-sync.md --context f
 
 `.env` is optional. The CLI loads it if it exists; otherwise set the variables in your shell. Only `OPENROUTER_API_KEY` is needed for a run without `--notion`.
 
+**Guided walkthrough:** `npm run demo` runs every step in order (note → tasks with a live timer while the model thinks → duplicate rerun refused → you approve, edit or reject the flagged tasks → approval rate → run log), pausing for Enter between steps.
+
 Add `--notion` to also create the tasks in a test Notion Tasks database (see below).
 
 - Output: `out/<runId>.json`
