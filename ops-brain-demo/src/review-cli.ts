@@ -7,7 +7,7 @@ import { appendReviewEvent, findRun, parseDecisions, summarizeReviews } from "./
 if (existsSync(".env")) process.loadEnvFile(".env");
 
 const USAGE =
-  "Usage: npm run review -- --run <runId> [--approve T1,T4|all] [--reject T2] [--edit T3:due=2026-12-12] [--reviewer name]  or  npm run review -- --stats";
+  "Usage: npm run review -- --run <runId|last> [--approve T1,T4|all] [--reject T2] [--edit T3:due=2026-12-12] [--reviewer name]  or  npm run review -- --stats";
 
 function parse(argv: string[]) {
   try {

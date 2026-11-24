@@ -83,8 +83,15 @@ function readJsonl<T>(path: string): T[] {
     .map((l) => JSON.parse(l) as T);
 }
 
+// runId "last" means the most recent run that produced tasks.
 export function findRun(runLogPath: string, runId: string): RunLog {
-  const run = readJsonl<RunLog>(runLogPath).find((r) => r.runId === runId);
+  const runs = readJsonl<RunLog>(runLogPath);
+  if (runId === "last") {
+    const latest = runs.filter((r) => r.output !== null).pop();
+    if (!latest) throw new UsageError("There is no run with tasks to review yet. Run `npm run extract` first");
+    return latest;
+  }
+  const run = runs.find((r) => r.runId === runId);
   if (!run) throw new UsageError(`Run ${runId} was not found in the run log`);
   if (run.output === null) {
     throw new UsageError(`Run ${runId} failed${run.error ? ` (${run.error})` : ""}, so there is nothing to review`);

@@ -55,6 +55,7 @@ Caveats: one run per model on 2 held-out notes (33 scored fields) is a small sam
 ## Record the review
 
 ```bash
+npm run review -- --run last --approve all          # "last" = the most recent run
 npm run review -- --run <runId> --approve all
 npm run review -- --run <runId> --approve T1,T4 --reject T2 --edit T3:due=2026-12-12,owner=aditya --reviewer sam
 npm run review -- --stats

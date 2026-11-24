@@ -115,6 +115,15 @@ describe("findRun", () => {
     expect(() => findRun(path, "run_bad")).toThrow(/Run run_bad failed.*nothing to review/);
   });
 
+  it('"last" picks the most recent run that produced tasks', () => {
+    const path = join(tmp(), "runs.jsonl");
+    appendRunLog(path, base);
+    appendRunLog(path, { ...base, runId: "run_newer" });
+    appendRunLog(path, { ...base, runId: "run_failed", output: null, error: "boom" });
+    expect(findRun(path, "last").runId).toBe("run_newer");
+    expect(() => findRun(join(tmp(), "empty.jsonl"), "last")).toThrow(/no run with tasks to review yet/);
+  });
+
   it("explains when there is no run log at all", () => {
     expect(() => findRun(join(tmp(), "missing.jsonl"), "run_x")).toThrow("Run run_x was not found in the run log");
   });

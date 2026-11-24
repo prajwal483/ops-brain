@@ -1,0 +1,95 @@
+Ops Brain demo — real terminal session, recorded 2026-11-24 20:10 IST
+Model: nvidia/nemotron-3.5-super-vl:free (OpenRouter). All data is fictional.
+Free-model output varies a little between runs (e.g. whether goals get linked); anything it isn't sure of is flagged, never guessed.
+
+────────────────────────────────────────────────────────────
+STEP 1 · The input: a fictional Hinglish meeting note
+────────────────────────────────────────────────────────────
+PS C:\Users\prajwal\BARGHAV\ops-brain-demo> Get-Content fixtures/meeting-2026-11-17-launch-sync.md
+
+# Launch sync (Tue 17 Nov 2026)
+
+Attendees: Riya, Karan, Meera, Aditya
+
+## Notes
+
+- Packaging: Karan said vendor finalise ho jayega by 28th, already tracked. Once vendor is final, Meera ko box design final karna hai, target 5 Dec.
+- Somebody has to check FSSAI labelling rules for the box print. Meera thinks it must be done before box design is final. Nobody took it yet.
+- Product photos can only happen after the sample boxes arrive. Aditya will book the photographer; shoot by 12 Dec.
+- Website: Riya wants product pages live by 20 Dec so there's buffer before the 15 Jan launch. Pages need the photos. Karan to coordinate with the Shopify freelancer.
+- Instagram: Adi, teaser content calendar draft Friday tak.
+- Riya: "Gujarati landing page variant bhi chahiye kya?" Parked, decide next week.
+
+────────────────────────────────────────────────────────────
+STEP 2 · Turn the note into Proposed tasks (≈50 s on the free model)
+────────────────────────────────────────────────────────────
+PS C:\Users\prajwal\BARGHAV\ops-brain-demo> npm run extract -- --note fixtures/meeting-2026-11-17-launch-sync.md --context fixtures/context.json --force
+
+Proposed tasks from "Launch sync" (2026-11-17): 5 tasks, 4 need a look
+
+⚠ T1  Finalise box design
+    owner: Meera Iyer | due: 2026-12-05 | goal: — | after: TASK-101, T2
+    ⚠ Not linked to a company goal
+⚠ T2  Check FSSAI labelling rules for box print
+    owner: — | due: — | goal: — | after: —
+    ⚠ AI found no owner. Check the note
+    ⚠ AI found no due date. Check the note
+    ⚠ Not linked to a company goal
+⚠ T3  Book product photographer
+    owner: Aditya Rao | due: 2026-12-12 | goal: — | after: —
+    ⚠ Not linked to a company goal
+✓ T4  Coordinate product pages with Shopify freelancer
+    owner: Karan Mehta | due: 2026-12-20 | goal: Launch the D2C website by 15 Jan 2027 | after: T3
+⚠ T5  Draft Instagram teaser content calendar
+    owner: Aditya Rao | due: 2026-11-20 | goal: — | after: —
+    ⚠ Not linked to a company goal
+
+Run run_20261124T144022_a89f · cost $0.00000 · saved C:\Users\prajwal\BARGHAV\ops-brain-demo\out\run_20261124T144022_a89f.json
+
+────────────────────────────────────────────────────────────
+STEP 3 · Run the same note again: refused, so no duplicate tasks
+────────────────────────────────────────────────────────────
+PS C:\Users\prajwal\BARGHAV\ops-brain-demo> npm run extract -- --note fixtures/meeting-2026-11-17-launch-sync.md --context fixtures/context.json
+
+This note was already turned into 5 tasks in run run_20261124T144022_a89f (2026-11-24). Running it again would create duplicate Proposed tasks. Add --force to run it anyway.
+
+────────────────────────────────────────────────────────────
+STEP 4 · A person reviews: approves 2, links the missing goals on 2, rejects 1
+────────────────────────────────────────────────────────────
+PS C:\Users\prajwal\BARGHAV\ops-brain-demo> npm run review -- --run last --approve T4,T5 --edit T1:goal=G1 --edit T3:goal=G1 --reject T2
+
+Run run_20261124T144022_a89f reviewed: 2 approved, 2 edited (goal), 1 rejected.
+
+────────────────────────────────────────────────────────────
+STEP 5 · Approval rate (the PRD's "80% approved without edits" metric)
+────────────────────────────────────────────────────────────
+PS C:\Users\prajwal\BARGHAV\ops-brain-demo> npm run review -- --stats
+
+Reviewed 5 tasks across 1 run: 40.0% approved without edits (target 80%). Most-edited field: goal (2).
+
+────────────────────────────────────────────────────────────
+STEP 6 · What was logged for this run (prompt version, model, tokens, cost)
+────────────────────────────────────────────────────────────
+PS C:\Users\prajwal\BARGHAV\ops-brain-demo> (last line of runs/runs.jsonl, summarised)
+
+{
+  "runId": "run_20261124T144022_a89f",
+  "startedAt": "2026-11-24T14:40:22.685Z",
+  "promptId": "extract-tasks",
+  "promptVersion": "2",
+  "model": "nvidia/nemotron-3.5-super-vl:free",
+  "attempts": 1,
+  "inputTokens": 750,
+  "outputTokens": 5364,
+  "costUsd": 0,
+  "inputSha256": "234ae84e541774c1…",
+  "tasks": 5
+}
+
+────────────────────────────────────────────────────────────
+STEP 7 · Tests (no AI calls)
+────────────────────────────────────────────────────────────
+PS C:\Users\prajwal\BARGHAV\ops-brain-demo> npm test
+
+ Test Files  13 passed (13)
+      Tests  108 passed (108)
